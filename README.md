@@ -6,5 +6,5 @@ This app displays a list of recent GOOD NEWS articles in the Guardian website AP
 Getting Started
 ---------------
 
-This sample uses the Gradle build system. To build this project, use the
+This code uses the Gradle build system. To build this project, use the
 "gradlew build" command or use "Import Project" in Android Studio.
