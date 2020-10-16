@@ -1,4 +1,4 @@
-package com.example.android.guardianapp;
+package com.example.android.guardianappVersionFive;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -24,7 +24,7 @@ public class SettingsActivity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.settings_main);
 
-            Preference preferredTopic = findPreference(getString(R.string.settings_defaultTopic));
+            Preference preferredTopic = findPreference(getString(R.string.query_topic));
             bindPreferenceSummaryToValue(preferredTopic);
 
         }

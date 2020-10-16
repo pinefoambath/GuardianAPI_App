@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.android.guardianapp;
+package com.example.android.guardianappVersionFive;
 
 import android.app.LoaderManager;
 import android.app.LoaderManager.LoaderCallbacks;
@@ -27,7 +27,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,20 +43,26 @@ public class ArticleActivity extends AppCompatActivity
 
     private static final String LOG_TAG = ArticleActivity.class.getName();
 
-    /** URL for earthquake data from the USGS dataset */
+    /**
+     * URL for article data from the Guardian API
+     */
     private static final String GUARDIAN_REQUEST_URL =
             "https://content.guardianapis.com/search?";
 
     /**
-     * Constant value for the earthquake loader ID. We can choose any integer.
+     * Constant value for the article loader ID. We can choose any integer.
      * This really only comes into play if you're using multiple loaders.
      */
     private static final int ARTICLE_LOADER_ID = 1;
 
-    /** Adapter for the list of articles */
+    /**
+     * Adapter for the list of articles
+     */
     private ArticleAdapter mAdapter;
 
-    /** TextView that is displayed when the list is empty */
+    /**
+     * TextView that is displayed when the list is empty
+     */
     private TextView mEmptyStateTextView;
 
     @Override
@@ -71,7 +76,7 @@ public class ArticleActivity extends AppCompatActivity
         mEmptyStateTextView = (TextView) findViewById(R.id.empty_view);
         articleListView.setEmptyView(mEmptyStateTextView);
 
-        // Create a new adapter that takes an empty list of earthquakes as input
+        // Create a new adapter that takes an empty list of articles as input
         mAdapter = new ArticleAdapter(this, new ArrayList<Article>());
 
         // Set the adapter on the {@link ListView}
@@ -85,17 +90,17 @@ public class ArticleActivity extends AppCompatActivity
         prefs.registerOnSharedPreferenceChangeListener(this);
 
         // Set an item click listener on the ListView, which sends an intent to a web browser
-        // to open a website with more information about the selected earthquake.
+        // to open a website with more information about the selected article.
         articleListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                // Find the current earthquake that was clicked on
+                // Find the current article that was clicked on
                 Article currentArticle = mAdapter.getItem(position);
 
                 // Convert the String URL into a URI object (to pass into the Intent constructor)
                 Uri articleUri = Uri.parse(currentArticle.getWebUrl());
 
-                // Create a new intent to view the earthquake URI
+                // Create a new intent to view the article URI
                 Intent websiteIntent = new Intent(Intent.ACTION_VIEW, articleUri);
 
                 // Send the intent to launch a new activity
@@ -133,7 +138,7 @@ public class ArticleActivity extends AppCompatActivity
     @Override
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
         if (key.equals(getString(R.string.settings_min_magnitude_key)) ||
-                key.equals(getString(R.string.settings_order_by_key))){
+                key.equals(getString(R.string.settings_order_by_key))) {
             // Clear the ListView as a new query will be kicked off
             mAdapter.clear();
 
@@ -152,7 +157,8 @@ public class ArticleActivity extends AppCompatActivity
     @Override
     public Loader<List<Article>> onCreateLoader(int i, Bundle bundle) {
 
-      SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String searchTopicFixed = "good%20news%20%20OR%20happy%20OR%20amazing%20OR%20wellbeing%20OR%20compassion%20OR%20positive%20OR%20kindness%20OR%20celebrate%20NOT%20accuse";
         String searchTopic = sharedPrefs.getString(
                 getString(R.string.query_topic),
                 getString(R.string.settings_defaultTopic)
@@ -160,7 +166,11 @@ public class ArticleActivity extends AppCompatActivity
         Uri baseUri = Uri.parse(GUARDIAN_REQUEST_URL);
 
         Uri.Builder uriBuilder = baseUri.buildUpon();
-        uriBuilder.appendQueryParameter("q", searchTopic);
+        // the below line originally was "searchTopic"
+        uriBuilder.appendQueryParameter("q", searchTopicFixed);
+        uriBuilder.appendQueryParameter("show-tags", "contributor");
+        // I added this new line below to show more results
+        uriBuilder.appendQueryParameter("page-size", "50");
         uriBuilder.appendQueryParameter("api-key", "8e81b867-2ffe-456d-b00e-fd87b080f822");
         return new ArticleLoader(this, uriBuilder.toString());
     }
@@ -174,14 +184,14 @@ public class ArticleActivity extends AppCompatActivity
         // Set empty state text to display "No articles found."
         mEmptyStateTextView.setText(R.string.no_articles);
 
-        // Clear the adapter of previous earthquake data
+        // Clear the adapter of previous article data
         //mAdapter.clear();
 
         // If there is a valid list of {@link Article}s, then add them to the adapter's
         // data set. This will trigger the ListView to update.
         if (articles != null && !articles.isEmpty()) {
             mAdapter.addAll(articles);
-          //  updateUi(articles);
+            //  updateUi(articles);
         }
     }
 
