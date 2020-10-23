@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.android.guardianapp;
+package com.example.android.guardianappVersionFive;
 
 import android.text.TextUtils;
 import android.util.Log;
@@ -38,7 +38,9 @@ import java.util.List;
  */
 public final class QueryUtils {
 
-    /** Tag for the log messages */
+    /**
+     * Tag for the log messages
+     */
     private static final String LOG_TAG = QueryUtils.class.getSimpleName();
 
     /**
@@ -166,10 +168,14 @@ public final class QueryUtils {
 
             // Create a JSONObject from the JSON response string
             JSONObject baseJsonResponse = new JSONObject(articleJSON);
+            Log.e(LOG_TAG, "HERE IS THE DATA I GET BACK" + articleJSON);
 
             // Extract the JSONArray associated with the key called "response",
             // which represents a list of features (or articles).
-            JSONArray articleArray = baseJsonResponse.getJSONArray("response");
+
+            JSONObject articleObject = baseJsonResponse.getJSONObject("response");
+
+            JSONArray articleArray = articleObject.getJSONArray("results");
 
             // For each earthquake in the earthquakeArray, create an {@link Article} object
             for (int i = 0; i < articleArray.length(); i++) {
@@ -180,23 +186,49 @@ public final class QueryUtils {
                 // For a given article, extract the JSONObject associated with the
                 // key called "results", which represents a list of all results
                 // for that article.
-                JSONObject properties = currentArticle.getJSONObject("results");
+                // JSONArray properties = currentArticle.getJSONArray("results");
 
                 // Extract the value for the key called "sectionID"
-               String sectionID = properties.getString("sectionID");
+                String sectionId = currentArticle.getString("sectionId");
 
                 // Extract the value for the key called "webPublicationDate"
-                String webPublicationDate = properties.getString("webPublicationDate");
+                String webPublicationDate = currentArticle.getString("webPublicationDate");
 
                 // Extract the value for the key called "webTitle"
-               String webTitle = properties.getString("webTitle");
+                String webTitle = currentArticle.getString("webTitle");
 
                 // Extract the value for the key called "webUrl"
-                String webUrl = properties.getString("webUrl");
+                String webUrl = currentArticle.getString("webUrl");
+
+                //Get the tags array
+                // JSONArray tags = currentArticle.getJSONArray("tags");
+
+                /* Extract the JSONArray with the key "tags"  */
+                String newsAuthor = "Author not available";
+                try {
+                    JSONArray tagsArray = currentArticle.getJSONArray("tags");
+                    if (tagsArray.length() > 0) {
+                        for (int o = 0; o < tagsArray.length(); o++) {
+                            /* Get a single object at position 0 within the array of tags */
+                            try {
+                                JSONObject currentTag = tagsArray.getJSONObject(o);
+                                Log.e(LOG_TAG, "current PANTS tag =" + currentTag);
+                                String newsAuthorLastName = currentTag.getString("lastName");
+                                String newsAuthorFirstName = currentTag.getString("firstName");
+                                newsAuthor = newsAuthorFirstName + " " + newsAuthorLastName;
+                                break;
+                            } catch (JSONException e) {
+                                // do nothing.
+                            }
+                        }
+                    }
+                } catch (JSONException e) {
+                    Log.e(LOG_TAG, "Missing one or more author's name JSONObject");
+                }
 
                 // Create a new {@link Article} object with the magnitude, location, time,
                 // and url from the JSON response.
-                Article article = new Article(sectionID, webPublicationDate, webTitle, webUrl);
+                Article article = new Article(sectionId, webPublicationDate, webTitle, webUrl, newsAuthor);
 
                 // Add the new {@link Article} to the list of articles.
                 articles.add(article);

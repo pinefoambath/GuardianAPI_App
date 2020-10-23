@@ -13,10 +13,10 @@
 -->
 <!-- Layout for our Settings Activity, containing a Preference Fragment -->
 <fragment
-    android:name="com.example.android.guardianapp.SettingsActivity$ArticlePreferenceFragment"
+    android:name="com.example.android.guardianappVersionFive.SettingsActivity$ArticlePreferenceFragment"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.android.guardianapp.SettingsActivity">
+    tools:context="com.example.android.guardianappVersionFive.SettingsActivity">
 </fragment>
