@@ -189,20 +189,28 @@ public class ArticleActivity extends AppCompatActivity
         Uri.Builder uriBuilder = baseUri.buildUpon();
         // the below line, after q originally featured "searchTopic"
         uriBuilder.appendQueryParameter("q", searchTopicFixed);
+
+        // look for good news in the headlines:
         uriBuilder.appendQueryParameter("query-fields", "headline");
+
         uriBuilder.appendQueryParameter("show-tags", "contributor");
-        // Pick a random page number via the page random we've just created:
-        //uriBuilder.appendQueryParameter("page", searchTopic);
+
         // show articles from the year the user has selected:
         uriBuilder.appendQueryParameter("from-date", dateFromString);
         uriBuilder.appendQueryParameter("to-date", dateToString);
+
+        // show up to 50 articles per search:
         uriBuilder.appendQueryParameter("page-size", "50");
-        // do not order by date but by relevance
-        uriBuilder.appendQueryParameter("order-by", "relevance");
+
+        // order by date
+        uriBuilder.appendQueryParameter("order-by", "newest");
+
         uriBuilder.appendQueryParameter("api-key", "8e81b867-2ffe-456d-b00e-fd87b080f822");
+
         // print the final url in the Logcat:
         System.out.println
                 ("The url is : " + uriBuilder.toString() );
+
         return new ArticleLoader(this, uriBuilder.toString());
     }
 
