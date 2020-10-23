@@ -1,7 +1,8 @@
 Guardian Search App
 ===================================
 
-This app displays a list of recent GOOD NEWS articles in the Guardian website API. I use a set of keywords to make sure your phone only displays happy news that make you believe in the world again :)
+This app displays "good news" features from the Guardian UK newspaper.
+=======
 
 Getting Started
 ---------------

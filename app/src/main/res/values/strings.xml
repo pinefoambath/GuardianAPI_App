@@ -15,14 +15,14 @@
 -->
 <resources>
     <!-- Title for the application. [CHAR LIMIT=12] -->
-    <string name="app_name">😁 Good News 👇🏾👇👇🏿 🎉</string>
+    <string name="app_name">Good News 😁👇🏾👇👇🏿 🎉</string>
 
     <!-- Default text to show with the article location ("Near the Pacific-Antarctic Ridge")
          if no specific kilometer distance from the primary location is given [CHAR LIMIT=30] -->
     <string name="near_the">Near the</string>
 
     <!-- Text to display in the list when there are no articles [CHAR LIMIT=NONE] -->
-    <string name="no_articles">Yikes! No articles found 🤷‍♀️</string>
+    <string name="no_articles">Yikes! No articles found 🤷‍♀ ️</string>
 
     <!-- Error message when there is no internet connectivity [CHAR LIMIT=NONE] -->
     <string name="no_internet_connection">Sorry, there is no internet connection 😳</string>
@@ -30,7 +30,7 @@
     <!-- Settings Menu Item [CHAR LIMIT=NONE] -->
     <string name="settings_menu_item">Settings</string>
     <!-- Settings Activity Title [CHAR LIMIT=NONE] -->
-    <string name="settings_title">News Settings</string>
+    <string name="settings_title">Date Settings</string>
 
     <!-- Strings For Minimum Magnitude Preference [CHAR LIMIT=30] -->
     <string name="settings_min_magnitude_label">Minimum Magnitude</string>
@@ -52,6 +52,6 @@
 
     <string name = "settings_defaultTopic">2020</string>
     <string name="query_topic">search</string>
-    <string name="search_Topic">News from which year?</string>
+    <string name="search_Topic">News from which year (2000+)?</string>
 
 </resources>
