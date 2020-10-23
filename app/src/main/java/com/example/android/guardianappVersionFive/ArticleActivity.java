@@ -160,7 +160,8 @@ public class ArticleActivity extends AppCompatActivity
     public Loader<List<Article>> onCreateLoader(int i, Bundle bundle) {
 
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String searchTopicFixed = "\"good news\"";
+        String searchTopicFixed = "\"great news\" OR \"good news\" AND NOT Kraft Corona Boris Coronavirus Covid JP Racing crisis \"no good news\" \"bad news is good news\" \"news, says Chinese\" \"not all good news\" \"despite good news\" \"not good news\" \"but less so for\" \"house price crash\" \"economic hazards\" \"good news. But\" \"inheritance tax\" \"rate cuts are good\"";
+
         //previous combined search terms where"
         //"20OR%20happy%20OR%20amazing%20OR%20wellbeing%20OR%20compassion%20OR%20positive%20OR%20kindness%20OR%20celebrate%20NOT%20accuse";
 
@@ -171,24 +172,33 @@ public class ArticleActivity extends AppCompatActivity
         );
         Uri baseUri = Uri.parse(GUARDIAN_REQUEST_URL);
 
+        // build the date component of the URl based on user input;
+
+        String dateFromString = searchTopic + "-01-01";
+        String dateToString = searchTopic + "-12-31";
+
         // pick a random number between 0 and 9 and add 1
-        Random rn = new Random();
-        int pageRandom = rn.nextInt(3) + 1;
-        // check in the log that this code is working:
-        System.out.println
-                ("The Randomly generated integer is : " + pageRandom);
+//        Random rn = new Random();
+//        int pageRandom = rn.nextInt(1) + 1;
+//        // check in the log that this code is working:
+//        System.out.println
+//                ("The Randomly generated integer is : " + pageRandom);
         // convert this to a string so that the guardian api is happy:
-        String pageString = Integer.toString(pageRandom);
+//        String pageString = Integer.toString(pageRandom);
 
         Uri.Builder uriBuilder = baseUri.buildUpon();
         // the below line, after q originally featured "searchTopic"
         uriBuilder.appendQueryParameter("q", searchTopicFixed);
+        uriBuilder.appendQueryParameter("query-fields", "headline");
         uriBuilder.appendQueryParameter("show-tags", "contributor");
         // Pick a random page number via the page random we've just created:
-        uriBuilder.appendQueryParameter("page", pageString);
-        // I added this new line below to show more results
-        uriBuilder.appendQueryParameter("page-size", "15");
-      //  uriBuilder.appendQueryParameter("section", "film");
+        //uriBuilder.appendQueryParameter("page", searchTopic);
+        // show articles from the year the user has selected:
+        uriBuilder.appendQueryParameter("from-date", dateFromString);
+        uriBuilder.appendQueryParameter("to-date", dateToString);
+        uriBuilder.appendQueryParameter("page-size", "50");
+        // do not order by date but by relevance
+        uriBuilder.appendQueryParameter("order-by", "relevance");
         uriBuilder.appendQueryParameter("api-key", "8e81b867-2ffe-456d-b00e-fd87b080f822");
         // print the final url in the Logcat:
         System.out.println
