@@ -27,6 +27,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,6 +37,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class ArticleActivity extends AppCompatActivity
         implements LoaderCallbacks<List<Article>>,
@@ -158,20 +160,39 @@ public class ArticleActivity extends AppCompatActivity
     public Loader<List<Article>> onCreateLoader(int i, Bundle bundle) {
 
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String searchTopicFixed = "good%20news%20%20OR%20happy%20OR%20amazing%20OR%20wellbeing%20OR%20compassion%20OR%20positive%20OR%20kindness%20OR%20celebrate%20NOT%20accuse";
+        String searchTopicFixed = "\"good news\"";
+        //previous combined search terms where"
+        //"20OR%20happy%20OR%20amazing%20OR%20wellbeing%20OR%20compassion%20OR%20positive%20OR%20kindness%20OR%20celebrate%20NOT%20accuse";
+
+        // the below does not currently get used as I hardcode the search query, rather than wait for user input:
         String searchTopic = sharedPrefs.getString(
                 getString(R.string.query_topic),
                 getString(R.string.settings_defaultTopic)
         );
         Uri baseUri = Uri.parse(GUARDIAN_REQUEST_URL);
 
+        // pick a random number between 0 and 9 and add 1
+        Random rn = new Random();
+        int pageRandom = rn.nextInt(3) + 1;
+        // check in the log that this code is working:
+        System.out.println
+                ("The Randomly generated integer is : " + pageRandom);
+        // convert this to a string so that the guardian api is happy:
+        String pageString = Integer.toString(pageRandom);
+
         Uri.Builder uriBuilder = baseUri.buildUpon();
-        // the below line originally was "searchTopic"
+        // the below line, after q originally featured "searchTopic"
         uriBuilder.appendQueryParameter("q", searchTopicFixed);
         uriBuilder.appendQueryParameter("show-tags", "contributor");
+        // Pick a random page number via the page random we've just created:
+        uriBuilder.appendQueryParameter("page", pageString);
         // I added this new line below to show more results
-        uriBuilder.appendQueryParameter("page-size", "50");
+        uriBuilder.appendQueryParameter("page-size", "15");
+      //  uriBuilder.appendQueryParameter("section", "film");
         uriBuilder.appendQueryParameter("api-key", "8e81b867-2ffe-456d-b00e-fd87b080f822");
+        // print the final url in the Logcat:
+        System.out.println
+                ("The url is : " + uriBuilder.toString() );
         return new ArticleLoader(this, uriBuilder.toString());
     }
 
