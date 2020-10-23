@@ -1,7 +1,7 @@
 Guardian Search App
 ===================================
 
-This app displays a list of recent articles for a particular keyword in the Guardian website API. 
+This app displays a list of "good news", created via the Guardian website API. Users can search good news stories from the past 20 years.
 
 Getting Started
 ---------------
